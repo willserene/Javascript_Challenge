@@ -1,19 +1,56 @@
-
+// from data.js
 var tableData = data;
 
-// YOUR CODE HERE!
+// Table body reference
+var tbody = d3.select("tbody");
 
+// Table with new rows of data appended to the website/HTML for each UFO sighting
 
+// Adding table to the HTML
+tableData.forEach(function(UFOSighting){
+    
+    var row = tbody.append("tr");
 
-// ----- HW INSTRUCTIONS -----
-// Create a basic HTML web page or use the index.html file provided (we recommend building your own custom page!).
+    Object.entries(UFOSighting).forEach(function([key, value]){
+        var cell = row.append("td");
+        cell.text(value);
+    });
+});
 
-// Using the UFO dataset provided in the form of an array of JavaScript objects, 
-    // write code that appends a table to your web page and then adds new rows of data for each UFO sighting.
+var button = d3.select("#filter-btn");
 
-// Make sure you have a column for date/time, city, state, country, shape, and comment at the very least.
+// Select the form 
+var form = d3.select(".form-group");
 
-// Use a date form in your HTML document and write JavaScript code that will listen for events and search through 
-    // the date/time column to find rows that match user input.
+// Create event handlers
+button.on("click", runEnter);
+form.on("submit",runEnter);
 
-   
+// Create an event listener
+function runEnter() {
+    // Clear existing table
+    tbody.html("");
+    
+    // Prevent the page from refreshing
+    d3.event.preventDefault();
+
+    // Select the user input location
+    var inputElement = d3.select('#datetime');
+
+    // Get the value from the input
+    var inputValue = inputElement.property('value');
+
+    // Filter the user input
+    var filteredInput = tableData.filter(data => data.datetime === inputValue);
+    
+    filteredInput.forEach(function(dateSelection){
+    
+        var row = tbody.append("tr");
+
+        Object.entries(dateSelection).forEach(function([key, value]){
+            var cell = row.append("td");
+            cell.text(value);
+        });
+    });
+
+};
